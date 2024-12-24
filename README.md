@@ -14,7 +14,6 @@ Este é o front-end de uma aplicação de gerenciamento de tarefas estilo Kanban
 - **Vue 2.6**: Framework JavaScript utilizado para construção da interface.
 - **Bootstrap**: Biblioteca de estilos para design responsivo e componentes de UI.
 - **Vite**: Ferramenta de build moderna para desenvolvimento rápido.
-- **Axios**: Biblioteca para realizar requisições HTTP à API.
 
 ## API Backend
 
