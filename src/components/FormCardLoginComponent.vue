@@ -20,12 +20,12 @@
         v-model="password"
       />
       <GenericButton
-        :buttonLabel="buttonLabel1"
+        :buttonLabel="buttonLabelLogin"
         type="submit"
         class="btn-outline-success"
       />
       <GenericButton
-        :buttonLabel="buttonLabel2"
+        :buttonLabel="buttonLabelRegister"
         class="btn-primary"
         type="button"
       />
@@ -53,8 +53,8 @@ export default {
     label1: String,
     label2: String,
     title: String,
-    buttonLabel1: String,
-    buttonLabel2: String,
+    buttonLabelLogin: String,
+    buttonLabelRegister: String,
   },
   methods: {
     submitForm() {
