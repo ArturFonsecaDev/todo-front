@@ -10,6 +10,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      name: 'login',
       path: '/login',
       component: FormLogin,
       props: {
@@ -21,6 +22,7 @@ export default new Router({
       }
     },
     {
+      name: 'register',
       path: '/register',
       component: FormRegister,
       props: {
