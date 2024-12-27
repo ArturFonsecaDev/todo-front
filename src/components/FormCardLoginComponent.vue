@@ -1,8 +1,8 @@
 <template>
   <form
-    @submit.prevent="submitForm"
     class="card border-secondary text-bg-dark flex-fill p-4 needs-validation"
     style="height: 100%"
+    @submit.prevent="submitForm"
     novalidate
   >
     <h2 class="card-title text-center text-white">{{ title }}</h2>
@@ -28,6 +28,7 @@
         :buttonLabel="buttonLabelRegister"
         class="btn-primary"
         type="button"
+        @click="goToRegisterPage"
       />
     </div>
   </form>
@@ -83,6 +84,11 @@ export default {
           console.error('Erro:', error);
           alert('Erro ao realizar login. Verifique seus dados.');
         });
+    },
+    goToRegisterPage(){
+      this.$router.push({
+        name: 'register'
+      });
     }
   },
 };
