@@ -7,6 +7,8 @@
       :type="type"
       :name="label"
       placeholder="a"
+      :value="value"
+      @input="$emit('input', localFormInput)"
       required
     />
     <div class="valid-feedback" v-if="localFormInput.trim() !== ''">
@@ -27,6 +29,7 @@ export default {
     label: String,
     icon: String,   
     type: String,
+    value: String
   },
   data() {
     return {
@@ -37,6 +40,6 @@ export default {
     validationClass() {
       return this.localFormInput.trim() !== '' ? 'is-valid' : 'is-invalid';
     },
-  }
+  },
 };
 </script>

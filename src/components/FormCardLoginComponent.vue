@@ -1,8 +1,8 @@
 <template>
   <form
-    @submit.prevent="submitForm"
     class="card border-secondary text-bg-dark flex-fill p-4 needs-validation"
     style="height: 100%"
+    @submit.prevent="submitForm"
     novalidate
   >
     <h2 class="card-title text-center text-white">{{ title }}</h2>
@@ -20,14 +20,15 @@
         v-model="password"
       />
       <GenericButton
-        :buttonLabel="buttonLabel1"
+        :buttonLabel="buttonLabelLogin"
         type="submit"
         class="btn-outline-success"
       />
       <GenericButton
-        :buttonLabel="buttonLabel2"
+        :buttonLabel="buttonLabelRegister"
         class="btn-primary"
         type="button"
+        @click="goToRegisterPage"
       />
     </div>
   </form>
@@ -42,7 +43,6 @@ export default {
     return {
       email: '',
       password: '',
-      formIsValid: true,
     };
   },
   components: {
@@ -53,13 +53,12 @@ export default {
     label1: String,
     label2: String,
     title: String,
-    buttonLabel1: String,
-    buttonLabel2: String,
+    buttonLabelLogin: String,
+    buttonLabelRegister: String,
   },
   methods: {
     submitForm() {
-      if (!this.email || !this.password) {
-        this.formIsValid = false;
+      if (!this.email.trim() || !this.password.trim()) {
         alert('Preencha todos os campos!');
         return;
       }
@@ -74,7 +73,6 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            this.formIsValid = false;
             throw new Error('Login falhou');
           }
           return response.json();
@@ -83,10 +81,14 @@ export default {
           console.log('Login bem-sucedido:', data);
         })
         .catch((error) => {
-          this.formIsValid = false;
           console.error('Erro:', error);
           alert('Erro ao realizar login. Verifique seus dados.');
         });
+    },
+    goToRegisterPage(){
+      this.$router.push({
+        name: 'register'
+      });
     }
   },
 };

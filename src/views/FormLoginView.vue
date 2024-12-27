@@ -7,11 +7,11 @@
       style="width: 150px;"
     >
     <FormCard 
-    label1="Login"
-    label2="Password"
-    buttonLabel1="Login"
-    buttonLabel2="Register"
-    title="Bem Vindo!"
+    :title="title"
+    :label1="label"
+    :label2="label2"
+    :buttonLabelLogin="buttonLabelLogin"
+    :buttonLabelRegister="buttonLabelRegister"
     ></FormCard>
   </div>
 </template>
