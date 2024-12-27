@@ -42,7 +42,6 @@ export default {
     return {
       email: '',
       password: '',
-      formIsValid: true,
     };
   },
   components: {
@@ -58,8 +57,7 @@ export default {
   },
   methods: {
     submitForm() {
-      if (!this.email || !this.password) {
-        this.formIsValid = false;
+      if (!this.email.trim() || !this.password.trim()) {
         alert('Preencha todos os campos!');
         return;
       }
@@ -74,7 +72,6 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            this.formIsValid = false;
             throw new Error('Login falhou');
           }
           return response.json();
@@ -83,7 +80,6 @@ export default {
           console.log('Login bem-sucedido:', data);
         })
         .catch((error) => {
-          this.formIsValid = false;
           console.error('Erro:', error);
           alert('Erro ao realizar login. Verifique seus dados.');
         });
