@@ -7,6 +7,7 @@
       :type="type"
       :name="label"
       placeholder="a"
+      @input="sendEvent"
       required
     />
     <div class="valid-feedback" v-if="localFormInput.trim() !== ''">
@@ -37,6 +38,11 @@ export default {
     validationClass() {
       return this.localFormInput.trim() !== '' ? 'is-valid' : 'is-invalid';
     },
+  },
+  methods: {
+    sendEvent(e){
+      this.$emit(`update:${this.label.toLowerCase()}`, localFormInput);
+    }
   }
 };
 </script>
