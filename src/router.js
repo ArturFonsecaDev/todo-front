@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import FormLogin from './views/FormLoginView.vue';
 import FormRegister from './views/FormRegisterView.vue';
+import DashBoard from './views/DashBoardView.vue';
 
 Vue.use(Router);
 
@@ -33,6 +34,11 @@ export default new Router({
         buttonLabel1: 'Join Us!',
         buttonLabel2: 'Already Have an Account?',
       }
+    },
+    {
+      name: 'app',
+      path: '/app',
+      component: DashBoard,
     }
   ]
 });
