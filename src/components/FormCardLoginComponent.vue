@@ -64,7 +64,10 @@ export default {
       }
 
       const url = 'http://localhost:8000/accounts/token/';
-      const payload = { email: this.email, password: this.password };
+      const payload = { 
+        email: this.email,
+        password: this.password 
+        };
 
       fetch(url, {
         method: 'POST',
@@ -72,13 +75,25 @@ export default {
         body: JSON.stringify(payload),
       })
         .then((response) => {
-          if (!response.ok) {
-            throw new Error('Login falhou');
-          }
+          if(response.status !== 200){
+            return response.json().then(err => {
+            throw new Error(err.non_field_errors);
+          });
+        }
           return response.json();
         })
         .then((data) => {
-          console.log('Login bem-sucedido:', data);
+          if(data.access){
+            const token = data.access;
+            const refreshToken = data.refresh;
+            const user = data.user;
+            this.$store.commit("setActiveToken", token);
+            this.$store.commit("setRefreshToken", refreshToken);
+            this.$store.commit("setUser", user);
+            this.goToMainAppPage();
+            return;
+          }
+          throw new Error('Token not Found!');
         })
         .catch((error) => {
           console.error('Erro:', error);
@@ -88,6 +103,11 @@ export default {
     goToRegisterPage(){
       this.$router.push({
         name: 'register'
+      });
+    },
+    goToMainAppPage(){
+      this.$router.push({
+        name: 'app'
       });
     }
   },
