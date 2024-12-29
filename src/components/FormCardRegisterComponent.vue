@@ -50,7 +50,7 @@ export default {
           confirm_password: this.confirmPassword
       }
 
-      fetch(`${url}/accounts/register`, {
+      fetch(`${url}/accounts/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -58,16 +58,20 @@ export default {
         body: JSON.stringify(payload)
         })
       .then(r => {
-        if(!r.ok){
-          alert('Registration failed');
-          return;
+        if(r.status !== 201){
+          return r.json().then( r => {
+          throw new Error(r.email)
+          });
         }
         return r.json();
       })
-      .then(data => {
-        console.log(data);
-        alert('Registration successful');
-      })
+      .then((data) => {
+        const successMessage = 'User created'
+        if(data.message == successMessage){
+          this.loginRequest();
+          return;
+        }
+    })
       .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while registering');
@@ -76,6 +80,50 @@ export default {
     goToLoginPage(){
       this.$router.push({
         name: 'login'
+      })
+    },
+    goToMainAppPage(){
+      this.$router.push({
+        name: 'app'
+      });
+    },
+    loginRequest(){
+      const url = 'http://localhost:8000';
+      const payload = { 
+        email: this.email,
+        password: this.password 
+        };
+      
+      fetch(`${url}/accounts/token/`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload) 
+      })
+      .then(r => {
+        if(r.status != 200){
+          return r.json().then(r => {
+            throw new Error(r.non_field_errors);
+          });
+        }
+        return r.json();
+      })
+      .then((data) => {
+        if(data.access){
+          const token = data.access;
+          const refreshToken = data.refresh;
+          const user = data.user;
+          this.$store.commit("setActiveToken", token);
+          this.$store.commit("setRefreshToken", refreshToken);
+          this.$store.commit("setUser", user);
+          this.goToMainAppPage();
+          return;
+        }
+        throw new Error('Token not Found!');
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        alert('An error occurred while logging in');
+        this.goToLoginPage();
       })
     },
     validateFields(){
