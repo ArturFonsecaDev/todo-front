@@ -10,7 +10,9 @@ export default new Vuex.Store({
     accessToken: JSON.parse(localStorage.getItem('accessToken')) || '',
     refreshToken: JSON.parse(localStorage.getItem('refreshToken')) || '',
     // SIDEBAR
-    sideBarColapsed: JSON.parse(localStorage.getItem('sideBarState')) || false
+    sideBarColapsed: JSON.parse(localStorage.getItem('sideBarState')) || false,
+    // KANBAN
+    kanbans: JSON.parse(localStorage.getItem('kanbans')) || []
   },
   mutations: {
     setUser(state, user) {
@@ -19,7 +21,7 @@ export default new Vuex.Store({
     },
     setActiveToken(state, token) {
       state.accessToken = token;
-      localStorage.setItem('Authorization', `Bearer ${JSON.stringify(state.accessToken)}`);
+      localStorage.setItem('Authorization', JSON.stringify(state.accessToken));
     },
     setRefreshToken(state, token) {
       state.refreshToken = token;
@@ -36,6 +38,11 @@ export default new Vuex.Store({
     changeSideBarState(state) {
       state.sideBarColapsed = !state.sideBarColapsed;
       localStorage.setItem('sideBarState', JSON.stringify(state.sideBarColapsed));
+    },
+    // KANBANS
+    setKanbans(state, kanbans){
+      state.kanbans = kanbans;
+      localStorage.setItem('kanbans', state.kanbans);
     }
   }
 });

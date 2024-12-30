@@ -37,6 +37,7 @@
 <script>
 import GenericInput from './GenericInputComponent.vue';
 import GenericButton from './GenericButtonComponent.vue';
+import { loginRequest } from '../requests/auth.js';
 
 export default {
   data() {
@@ -62,42 +63,16 @@ export default {
         alert('Preencha todos os campos!');
         return;
       }
-
-      const url = 'http://localhost:8000/accounts/token/';
-      const payload = { 
-        email: this.email,
-        password: this.password 
-        };
-
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-        .then((response) => {
-          if(response.status !== 200){
-            return response.json().then(err => {
-            throw new Error(err.non_field_errors);
-          });
-        }
-          return response.json();
-        })
-        .then((data) => {
-          if(data.access){
-            const token = data.access;
-            const refreshToken = data.refresh;
-            const user = data.user;
-            this.$store.commit("setActiveToken", token);
-            this.$store.commit("setRefreshToken", refreshToken);
-            this.$store.commit("setUser", user);
-            this.goToMainAppPage();
-            return;
-          }
-          throw new Error('Token not Found!');
+      loginRequest(this.email, this.password)
+        .then(({ token, refreshToken, user }) => {
+          this.$store.commit('setUser', user);
+          this.$store.commit('setActiveToken', token);
+          this.$store.commit('setRefreshToken', refreshToken);
+          this.goToMainAppPage(); 
         })
         .catch((error) => {
-          console.error('Erro:', error);
-          alert('Erro ao realizar login. Verifique seus dados.');
+          console.error('Erro no login:', error.message);
+          alert('Erro ao realizar login: ' + error.message);
         });
     },
     goToRegisterPage(){

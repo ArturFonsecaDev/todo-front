@@ -1,8 +1,8 @@
 <template>
   <aside :class="['side-bar d-flex flex-column align-items-center', { collapsed: sideBarColapsed }]">
     <ul class="list-group w-100 d-flex flex-column justify-content-between">
-      <div>
       <!-- Botões principais -->
+      <div>
       <li class="list-group-item text-center p-3">
         <button class="btn btn-primary btn-sm w-100" @click="changeSideBarState">
           <i class="bi bi-list"></i>
@@ -19,11 +19,10 @@
         </button>
       </li>
       </div>
-
-      <!-- Botão de logout no final -->
+      <!-- LOGOUT -->
       <li id="logout" class="list-group-item text-center p-3">
         <button class="btn btn-light btn-sm w-100" @click="handleLogout">
-          <i class="bi bi-box-arrow-left"></i> <!-- Ícone do logout sem texto -->
+          <i class="bi bi-box-arrow-left"></i>
         </button>
       </li>
     </ul>
@@ -62,12 +61,12 @@ export default {
   top: 0;
   left: 0;
   transition: width 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 1;
 }
 
 /* Sidebar colapsado */
 .side-bar.collapsed {
-  width: 60px;
+  width: 70px;
 }
 
 

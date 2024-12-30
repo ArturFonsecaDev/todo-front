@@ -17,6 +17,7 @@
 
 import GenericButton from './GenericButtonComponent.vue';
 import GenericInput from './GenericInputComponent.vue';
+import { registerRequest, loginRequest } from '../requests/auth.js';
 
 export default {
   props: {
@@ -43,39 +44,23 @@ export default {
       if(!this.validateFields()){
         return;
       }
-      const url = 'http://localhost:8000';
-      const payload = {
-          email: this.email,
-          password: this.password,
-          confirm_password: this.confirmPassword
-      }
-
-      fetch(`${url}/accounts/register/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-        })
-      .then(r => {
-        if(r.status !== 201){
-          return r.json().then( r => {
-          throw new Error(r.email)
-          });
+      registerRequest(this.email, this.password, this.confirmPassword)
+      .then(({message, user}) => {
+        if(user){
+          loginRequest(this.email, this.password)
+          .then(({token, refreshToken, user}) => {
+            this.$store.commit('setActiveToken', token);
+            this.$store.commit('setRefreshToken', refreshToken);
+            this.$store.commit('setUser', user);
+            this.goToMainAppPage();
+          })
         }
-        return r.json();
+        throw new Error('User not Found!');
       })
-      .then((data) => {
-        const successMessage = 'User created'
-        if(data.message == successMessage){
-          this.loginRequest();
-          return;
-        }
-    })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while registering');
-      });
+      .catch(err => {
+        console.error(`Error encountered: ${err.message}`)
+        alert(`Erro ao registrar: ${err.message}`);
+      })
     },
     goToLoginPage(){
       this.$router.push({
@@ -86,45 +71,6 @@ export default {
       this.$router.push({
         name: 'app'
       });
-    },
-    loginRequest(){
-      const url = 'http://localhost:8000';
-      const payload = { 
-        email: this.email,
-        password: this.password 
-        };
-      
-      fetch(`${url}/accounts/token/`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload) 
-      })
-      .then(r => {
-        if(r.status != 200){
-          return r.json().then(r => {
-            throw new Error(r.non_field_errors);
-          });
-        }
-        return r.json();
-      })
-      .then((data) => {
-        if(data.access){
-          const token = data.access;
-          const refreshToken = data.refresh;
-          const user = data.user;
-          this.$store.commit("setActiveToken", token);
-          this.$store.commit("setRefreshToken", refreshToken);
-          this.$store.commit("setUser", user);
-          this.goToMainAppPage();
-          return;
-        }
-        throw new Error('Token not Found!');
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        alert('An error occurred while logging in');
-        this.goToLoginPage();
-      })
     },
     validateFields(){
       const validations = [
