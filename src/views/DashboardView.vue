@@ -1,8 +1,10 @@
 <template>
-<div>
+<div class="wrapper">
+  <div class="side-bar">
+    <SideBarComponent></SideBarComponent>
+  </div>
   <h1>DASHBOARD</h1>
   <p>Bom dia <span id="user-email">{{ user.email }}</span></p>
-  <GenericButton buttonLabel="Logout!" type="button" @click="handleLogout" class="btn-primary"></GenericButton>
 </div>
 </template>
 
@@ -10,10 +12,13 @@
 
 import { mapState } from 'vuex';
 import GenericButton from '../components/GenericButtonComponent.vue';
+import SideBarComponent from '../components/SideBarComponent.vue';
+
 
 export default {
   components: {
-    GenericButton
+    GenericButton,
+    SideBarComponent,
   },
   computed: {
     ...mapState(['user', 'accessToken', 'refreshToken']),
@@ -31,8 +36,9 @@ export default {
 
 <style scoped>
 
-  div{
-    color: white;
+
+  h1, p{
+    color: #fff;
   }
 
   #user-email{
