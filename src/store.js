@@ -12,7 +12,7 @@ export default new Vuex.Store({
     // SIDEBAR
     sideBarColapsed: JSON.parse(localStorage.getItem('sideBarState')) || false,
     // KANBAN
-    kanbans: JSON.parse(localStorage.getItem('kanbans')) || []
+    kanbans: localStorage.getItem('kanbans') || []
   },
   mutations: {
     setUser(state, user) {

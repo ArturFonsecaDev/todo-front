@@ -1,5 +1,10 @@
 <template>
-  <button type="button" @click="handleClick">Request</button>
+  <ul v-if="howMuchKanbans">
+    <li v-for="kanban in kanbans" :key="kanban.id"></li>
+  </ul>
+  <div v-else>
+    <p>Nenhum Kanban encontrado.</p>
+  </div>
 </template>
 
 <script>
@@ -9,24 +14,30 @@ import { listKanbans } from '../requests/KanbanRequests.js';
 export default {
   computed: {
     ...mapState(['accessToken', 'refreshToken', 'kanbans']),
+    howMuchKanbans(){
+      return this.kanbans.length;
+    }
   },
   methods: {
     ...mapMutations(['setActiveToken', 'setKanbans']),
-    async handleClick() {
+    async fetchKanbans() {
       try {
         const data = await listKanbans(this.accessToken, this.refreshToken);
 
-        if (data.newAccess) {
+        if(data.newAccess){
           this.setActiveToken(data.newAccess);
         }
-        if (data.kanbans) {
+        if(data.kanbans){
           this.setKanbans(data.kanbans);
         }
-      } catch (error) {
+      } catch(error){
         console.error('Erro ao listar kanbans:', error.message);
         alert('Não foi possível carregar os kanbans. Tente novamente.');
       }
     },
+  },
+  created(){
+    this.fetchKanbans()
   },
 };
 </script>
