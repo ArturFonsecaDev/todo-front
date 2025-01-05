@@ -64,11 +64,12 @@ export default {
         return;
       }
       loginRequest(this.email, this.password)
-        .then(({ token, refreshToken, user }) => {
-          this.$store.commit('setUser', user);
-          this.$store.commit('setActiveToken', token);
-          this.$store.commit('setRefreshToken', refreshToken);
-          this.goToMainAppPage(); 
+        .then((data) => {
+          this.$store.commit('setUser', data.user);
+          this.$store.commit('setAccessToken', data.token);
+          this.$store.commit('setRefreshToken', data.refreshToken);
+          this.goToMainAppPage();
+          return;
         })
         .catch((error) => {
           console.error('Erro no login:', error.message);

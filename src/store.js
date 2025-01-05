@@ -17,15 +17,15 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = { ...user };
-      localStorage.setItem('user', JSON.stringify(state.user));
+      localStorage.setItem('user', JSON.stringify(user));
     },
-    setActiveToken(state, token) {
+    setAccessToken(state, token) {
       state.accessToken = token;
-      localStorage.setItem('Authorization', JSON.stringify(state.accessToken));
+      localStorage.setItem('accessToken', JSON.stringify(token));
     },
     setRefreshToken(state, token) {
       state.refreshToken = token;
-      localStorage.setItem('refreshToken', JSON.stringify(state.refreshToken));
+      localStorage.setItem('refreshToken', JSON.stringify(token));
     },
     logout(state) {
       state.user = {};

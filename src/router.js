@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import FormLogin from './views/FormLoginView.vue';
 import FormRegister from './views/FormRegisterView.vue';
-import DashBoard from './views/DashBoardView.vue';
+import DashBoard from './views/DashboardView.vue';
 
 Vue.use(Router);
 
