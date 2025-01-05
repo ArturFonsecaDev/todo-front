@@ -5,7 +5,7 @@ export function loginRequest(email, password) {
   return fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   })
     .then((response) => {
       if (response.status !== 200) {
@@ -46,7 +46,7 @@ export function registerRequest(email, password, confirmPassword) {
       return response.json();
     })
     .then(data => {
-      if(!data.access){
+      if(!data.user.email){
         throw new Error('Registration failed!');
       }
       const token = data.access;

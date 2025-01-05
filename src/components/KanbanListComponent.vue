@@ -4,28 +4,33 @@
   </ul>
   <div v-else>
     <p>Nenhum Kanban encontrado.</p>
+    <GenericButton buttonLabel="Criar Kanban" type="button" class="btn-success custom"></GenericButton>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 import { listKanbans } from '../requests/KanbanRequests.js';
+import GenericButton from './GenericButtonComponent.vue';
 
 export default {
+  components: {
+    GenericButton,
+  },
   computed: {
-    ...mapState(['accessToken', 'refreshToken', 'kanbans']),
+    ...mapState(['accessToken', 'refreshToken', 'kanbans', 'user']),
     howMuchKanbans(){
       return this.kanbans.length;
     }
   },
   methods: {
-    ...mapMutations(['setActiveToken', 'setKanbans']),
+    ...mapMutations(['setAccessToken', 'setKanbans']),
     async fetchKanbans() {
       try {
-        const data = await listKanbans(this.accessToken, this.refreshToken);
+        const data = await listKanbans();
 
         if(data.newAccess){
-          this.setActiveToken(data.newAccess);
+          this.setAccessToken(data.newAccess);
         }
         if(data.kanbans){
           this.setKanbans(data.kanbans);

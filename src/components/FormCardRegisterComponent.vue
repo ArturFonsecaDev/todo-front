@@ -40,27 +40,48 @@ export default {
     }
   },
   methods: {
-    submitForm(){
+    async submitForm(){
       if(!this.validateFields()){
         return;
       }
-      registerRequest(this.email, this.password, this.confirmPassword)
-      .then(({message, user}) => {
-        if(user){
-          loginRequest(this.email, this.password)
-          .then(({token, refreshToken, user}) => {
-            this.$store.commit('setActiveToken', token);
-            this.$store.commit('setRefreshToken', refreshToken);
-            this.$store.commit('setUser', user);
-            this.goToMainAppPage();
-          })
-        }
-        throw new Error('User not Found!');
-      })
-      .catch(err => {
-        console.error(`Error encountered: ${err.message}`)
-        alert(`Erro ao registrar: ${err.message}`);
-      })
+      try{
+      const registerData = await registerRequest(this.email, this.password, this.confirmPassword);
+      if(!registerData.user.email){
+        throw new Error('Registration Failed!');
+      }
+      const user = registerData.user; 
+      this.$store.commit('setUser', user);
+      console.log(user);
+      }
+      catch(err){
+        console.error(`Error message: ${err}`);
+        alert('An error occurred during registration. Please try again.');
+        return;
+      }
+
+      alert('Registration successful!');
+
+    // auto login
+    try{
+      const loginResponse = await loginRequest(this.email, this.password);
+      if(!loginResponse.user.email){
+        throw new Error('Login failed!');
+      }
+      // setting env variables
+      const accessToken = loginResponse.token;
+      this.$store.commit('setAccessToken', accessToken);
+      const refreshToken = loginResponse.refreshToken;
+      this.$store.commit('setRefreshToken', refreshToken);
+      const user = loginResponse.user;
+      this.$store.commit('setUser', user);
+      this.goToMainAppPage();
+      return;
+    }catch(err){
+      console.error(`Error message: ${err}`);
+      alert('An error occurred during login. Please try again.');
+      return;
+    }
+
     },
     goToLoginPage(){
       this.$router.push({
